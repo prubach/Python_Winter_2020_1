@@ -23,11 +23,17 @@ class Account:
         self.interest_rate = 0.01
 
     def deposit(self, amount):
-        #TODO - add validation to prevent misuse
+        # TODO - add validation to prevent misuse
+        if amount < 0:
+            raise NegativeAmountException('{0} amount provided to deposit: {1}'.format(self.account_id, amount))
         self._balance += amount
 
     def charge(self, amount):
         #TODO - add validation to prevent misuse
+        if amount < 0:
+            raise NegativeAmountException('{0} amount provided to deposit: {1}'.format(self.account_id, amount))
+        if amount > self._balance:
+            raise NotEnoughMoneyException('{0} amount provided to deposit: {1}'.format(self.account_id, amount))
         self._balance -= amount
 
     def get_balance(self):
@@ -57,11 +63,22 @@ class Bank:
         return a
 
     def transfer(self, acc_from, acc_to, amount):
-        #TODO - implement it
+        acc_from.charge(amount)
+        acc_to.deposit(amount)
         pass
 
     def __str__(self):
         return 'Bank[{0}, {1}]'.format(self._customers, self._accounts)
+
+class BankException(Exception):
+    pass
+
+class NotEnoughMoneyException(BankException):
+    pass
+
+class NegativeAmountException(BankException):
+    pass
+
 
 
 bank = Bank()
@@ -70,18 +87,25 @@ bank = Bank()
 c = bank.create_customer('John', 'Brown', 'john@brown.com')
 print(c)
 
-a1 = bank.create_account(c)
-a1.deposit(-100.08)
-print(a1)
+try:
+    a1 = bank.create_account(c)
+    a1.deposit(100.08)
+    print(a1)
 
 
-c2 = bank.create_customer('Anne', 'Brown', 'anne@brown.com')
-print(c2)
-a2 = bank.create_account(c2)
-a2.deposit(576.89)
-print(a2)
+    c2 = bank.create_customer('Anne', 'Brown', 'anne@brown.com')
+    print(c2)
+    a2 = bank.create_account(c2)
+    a2.deposit(576.89)
+    print(a2)
 
-print(bank)
+    print(bank)
+
+    bank.transfer(a1, a2, 180)
+    print(bank)
+
+except BankException as be:
+    print(str(be))
 
 
 # c = Customer('John', 'Brown', 'john@brown.com')
