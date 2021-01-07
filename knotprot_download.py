@@ -69,3 +69,8 @@ def create_thumbnail(size, path):
     image = Image.open(path)
     image.thumbnail(size)
     image.save(thumbnail_path)
+
+
+
+
+
