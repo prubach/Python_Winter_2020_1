@@ -1,5 +1,6 @@
 import threading
 import time
+import multiprocessing
 
 class MyThread(threading.Thread):
     def __init__(self, threadId, name, delay, counter):
@@ -17,7 +18,14 @@ class MyThread(threading.Thread):
             self.counter -= 1
         print('Finishing thread: ' + self.name)
 
+print('CPUs: %s' % (multiprocessing.cpu_count()))
+
 thread1 = MyThread(1, 'Thread 1', 1, 5)
 thread2 = MyThread(2, 'Thread 2', 1, 5)
-thread1.run()
-thread2.run()
+thread3 = MyThread(3, 'Thread 3', 1, 5)
+thread1.start()
+thread2.start()
+thread3.start()
+
+thread1.join()
+print('Exiting Main Thread')
