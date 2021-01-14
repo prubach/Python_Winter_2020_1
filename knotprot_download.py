@@ -6,7 +6,7 @@ from urllib.request import urlopen, Request
 from time import time
 from PIL import Image
 
-SEARCH_STRING = 'https://knotprot.cent.uw.edu.pl/browse/?set=True&bridgeType=probab&slipknotTypes=41&raw=1'
+SEARCH_STRING = 'https://knotprot.cent.uw.edu.pl/browse/?set=True&bridgeType=probab&slipknotTypes=%2B31&raw=1'
 DOWNLOAD_LINK = 'https://knotprot.cent.uw.edu.pl/static/knot_data/{0}/{1}/{0}_{1}.png'
 
 logger = logging.getLogger(__name__)

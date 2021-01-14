@@ -1,6 +1,7 @@
 from knotprot_download import get_proteins, setup_download_dir, download_link, time_it, create_thumbnail
 from functools import partial
 from multiprocessing.pool import Pool
+from concurrent.futures.process import ProcessPoolExecutor
 from threading import Thread
 from queue import Queue
 from pathlib import Path
@@ -12,7 +13,7 @@ def run_sequentially(mydir):
 def run_multi_thread(dir):
     proteins = get_proteins()
     download = partial(download_link, dir)
-    with Pool(4) as pl:
+    with Pool(12) as pl:
         pl.map(download, proteins)
 
 
@@ -45,8 +46,13 @@ def run_workers(dir):
 def thumbnails():
     for image_path in Path('images').iterdir():
         print(image_path)
-        create_thumbnail((256,256), image_path)
+        create_thumbnail((256, 256), image_path)
 
+
+def thumbnails_multi():
+    create_thumbs = partial(create_thumbnail, (256, 256))
+    with ProcessPoolExecutor() as executer:
+        executer.map(create_thumbs, Path('images').iterdir())
 
 #mydir = setup_download_dir()
 #print(get_proteins())
@@ -54,4 +60,5 @@ def thumbnails():
 #run_sequentially(mydir)
 #time_it(run_multi_thread, mydir)
 #time_it(run_workers, mydir)
-time_it(thumbnails)
+#time_it(thumbnails)
+time_it(thumbnails_multi)
