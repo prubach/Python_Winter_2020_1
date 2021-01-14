@@ -40,9 +40,9 @@ def setup_download_dir():
     return str(download_dir)
 
 
-def time_it(proc, dir):
+def time_it(proc, dir=None):
     t0 = time()
-    proc(dir)
+    proc(dir) if dir else proc()
     t = time()-t0
     print('Done {0} in {1} s.'.format(proc.__name__, round(t, 3)))
 
